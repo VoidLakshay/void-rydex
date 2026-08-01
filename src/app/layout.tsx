@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RydeX - Vehicle booking app",
-  description: "A vehicle booking app built with Next.js, Tailwind CSS, and TypeScript. It allows users to book vehicles for their transportation needs.",
+  title: "RydeX - Premium Vehicle Booking App",
+  description: "A premium vehicle booking app built with Next.js, Tailwind CSS, and TypeScript. It allows users to easily book vehicles for their transportation needs.",
+  keywords: ["vehicle booking", "rydex", "car rental", "premium vehicles"],
 };
 
 export default function RootLayout({
