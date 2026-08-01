@@ -30,6 +30,18 @@ function AuthModel({ open, onClose }: propType) {
   const {data}=useSession()
   console.log(data);
 
+  const handleChangeOtp = (index: number, value: string) => {
+    if (!/^[0-9]?$/.test(value)) return;
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    
+    if (value !== "" && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      if (nextInput) nextInput.focus();
+    }
+  };
+
   const handelsignup = async () => {
     try {
       setLoading(true);
@@ -42,6 +54,7 @@ function AuthModel({ open, onClose }: propType) {
       });
 
       console.log(data);
+      setstep("otp"); // Navigate to OTP screen after successful signup
     } catch (error: any) {
       setError(error.response?.data?.error || "Something went wrong");
     } finally {
@@ -248,6 +261,34 @@ function AuthModel({ open, onClose }: propType) {
                         Login
                       </span>
                     </p>
+                  </motion.div>
+                )}
+                {step == "otp" && (
+                  <motion.div
+                    key ="otp"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                  >
+                    <h2 className="text-xl font-semibold">Verify Email</h2>
+                    <div className="mt-6 flex justify-between gap-2">
+                      {otp.map((digit, i) => (
+                        <input
+                          key={i}
+                          id={`otp-${i}`}
+                          value={digit}
+                          maxLength={1}
+                          onChange={(e) => handleChangeOtp(i, e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Backspace' && digit === '' && i > 0) {
+                              const prevInput = document.getElementById(`otp-${i - 1}`);
+                              if (prevInput) prevInput.focus();
+                            }
+                          }}
+                          className="w-10 h-12 sm:w-12 text-center text-lg font-semibold rounded-xl bg-white border border-black/20 outline-none focus:border-black transition"
+                        />
+                      ))}
+                    </div>
                   </motion.div>
                 )}
               </div>
