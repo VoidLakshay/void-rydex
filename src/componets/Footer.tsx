@@ -1,11 +1,11 @@
 import React from 'react'
 
-function footer() {
+function Footer() {
   return (
-    <div>
-      
-    </div>
+    <footer className="w-full text-center py-4 text-sm text-gray-500 border-t border-black/10 mt-auto">
+      &copy; {new Date().getFullYear()} RydeX. All rights reserved.
+    </footer>
   )
 }
 
-export default footer
+export default Footer
