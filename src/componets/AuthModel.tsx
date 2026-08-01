@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { CircleDashed, Lock, Mail, User, X } from "lucide-react";
 import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
-import { set } from "mongoose";
+
 
 type propType = {
   open: boolean;
