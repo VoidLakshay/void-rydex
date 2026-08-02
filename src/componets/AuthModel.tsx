@@ -289,6 +289,9 @@ function AuthModel({ open, onClose }: propType) {
                         />
                       ))}
                     </div>
+                    <button className="mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition">
+                      Verify and Create Account
+                    </button>
                   </motion.div>
                 )}
               </div>
