@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "RydeX - Premium Vehicle Booking App",
   description: "A premium vehicle booking app built with Next.js, Tailwind CSS, and TypeScript. It allows users to easily book vehicles for their transportation needs.",
   keywords: ["vehicle booking", "rydex", "car rental", "premium vehicles"],
+  authors: [{ name: "RydeX Team" }],
 };
 
 export default function RootLayout({
