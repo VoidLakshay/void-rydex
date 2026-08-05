@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Validate user password length
     if (password.length < 6) {
       return NextResponse.json(
         { message: "password must be at least 6 characters" },
