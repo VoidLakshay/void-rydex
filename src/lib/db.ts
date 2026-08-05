@@ -10,6 +10,9 @@ if (!cached) {
   cached = global.mongooseConn = { conn: null, promise: null }
 }
 
+/**
+ * Establishes and caches a connection to the MongoDB database.
+ */
 const connectToDatabase = async () => {
   if (cached.conn) {
     console.log('Using cached MongoDB connection')
