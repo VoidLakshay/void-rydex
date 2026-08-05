@@ -12,6 +12,7 @@ interface IUser extends mongoose.Document {
   updatedAt: Date;
 }
 
+// Schema definition for the User model
 const userSchema = new mongoose.Schema<IUser>(
   {
     name: { type: String, required: true },
