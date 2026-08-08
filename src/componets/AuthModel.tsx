@@ -62,6 +62,39 @@ function AuthModel({ open, onClose }: propType) {
     }
   };
 
+  const handleVerifyOtp = async () => {
+    const otpValue = otp.join("");
+    if (otpValue.length < 6) {
+      setError("Please enter all 6 digits");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+
+      const { data } = await axios.post("/api/auth/verify", {
+        email,
+        otp: otpValue,
+      });
+
+      console.log(data);
+      
+      // Auto login after verification
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      console.log(res);
+      onClose(); // Close modal upon successful sign-in
+    } catch (error: any) {
+      setError(error.response?.data?.error || "Failed to verify OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogin = async () => {
     setLoading(true);
     setError("");
@@ -271,6 +304,7 @@ function AuthModel({ open, onClose }: propType) {
                     exit={{ opacity: 0, x: 20 }}
                   >
                     <h2 className="text-xl font-semibold">Verify Email</h2>
+                    {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                     <div className="mt-6 flex justify-between gap-2">
                       {otp.map((digit, i) => (
                         <input
@@ -289,8 +323,16 @@ function AuthModel({ open, onClose }: propType) {
                         />
                       ))}
                     </div>
-                    <button className="mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition">
-                      Verify and Create Account
+                    <button 
+                      className="mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center"
+                      onClick={handleVerifyOtp}
+                      disabled={loading}
+                    >
+                      {!loading ? (
+                        "Verify and Create Account"
+                      ) : (
+                        <CircleDashed size={18} color="white" className="animate-spin" />
+                      )}
                     </button>
                   </motion.div>
                 )}
