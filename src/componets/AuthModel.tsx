@@ -56,7 +56,7 @@ function AuthModel({ open, onClose }: propType) {
       console.log(data);
       setstep("otp"); // Navigate to OTP screen after successful signup
     } catch (error: any) {
-      setError(error.response?.data?.error || "Something went wrong");
+      setError(error.response?.data?.error || error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ function AuthModel({ open, onClose }: propType) {
       console.log(res);
       onClose(); // Close modal upon successful sign-in
     } catch (error: any) {
-      setError(error.response?.data?.error || "Failed to verify OTP");
+      setError(error.response?.data?.message || error.response?.data?.error || "Failed to verify OTP");
     } finally {
       setLoading(false);
     }

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const { email, otp } = await req.json()
     
     if (!email || !otp) {
-      return NextResponse.json({ error: 'Email and OTP are required' }, { status: 400 })
+      return NextResponse.json({ message: 'email and otp is required' }, { status: 400 })
     }
 
     await connectToDatabase()
@@ -15,19 +15,19 @@ export async function POST(req: NextRequest) {
     const user = await User.findOne({ email })
     
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      return NextResponse.json({ message: 'user not found' }, { status: 404 })
     }
 
     if (user.isEmailVerified) {
-      return NextResponse.json({ error: 'Email is already verified' }, { status: 400 })
+      return NextResponse.json({ message: 'email is already verified' }, { status: 400 })
     }
 
     if (user.otp !== otp) {
-      return NextResponse.json({ error: 'Invalid OTP' }, { status: 400 })
+      return NextResponse.json({ message: 'invalid otp' }, { status: 400 })
     }
 
     if (user.otpExpiresAt && new Date() > new Date(user.otpExpiresAt)) {
-      return NextResponse.json({ error: 'OTP has expired' }, { status: 400 })
+      return NextResponse.json({ message: 'otp has been expired' }, { status: 400 })
     }
 
     // OTP is valid, verify user
@@ -36,9 +36,9 @@ export async function POST(req: NextRequest) {
     user.otpExpiresAt = undefined
     await user.save()
 
-    return NextResponse.json({ message: 'Email verified successfully' }, { status: 200 })
+    return NextResponse.json({ message: 'email verified successfully' }, { status: 200 })
   } catch (error) {
     console.error("Verification error:", error)
-    return NextResponse.json({ error: 'Failed to verify OTP' }, { status: 500 })
+    return NextResponse.json({ message: 'failed to verify otp' }, { status: 500 })
   }
 }
