@@ -35,7 +35,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!isMatch) {
           throw new Error("Invalid password")
         }
-        return { id: user._id.toString(), name: user.name, email: user.email, role: user.role, emailVerified: user.emailVerified }
+        if (!user.isEmailVerified) {
+          throw new Error("Please verify your email first")
+        }
+        return { id: user._id.toString(), name: user.name, email: user.email, role: user.role, emailVerified: user.isEmailVerified }
       },
     }),
     Google({
