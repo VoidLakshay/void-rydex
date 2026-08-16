@@ -18,14 +18,14 @@ type propType = {
 type stepType = "login" | "signup" | "otp";
 
 function AuthModel({ open, onClose }: propType) {
-  const [step, setstep] = useState<stepType>("login");
+  const [step, setStep] = useState<stepType>("login");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [err, setErr] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const {data}=useSession()
   console.log(data);
@@ -45,7 +45,7 @@ function AuthModel({ open, onClose }: propType) {
   const handelsignup = async () => {
     try {
       setLoading(true);
-      setError("");
+      setErr("");
 
       const { data } = await axios.post("/api/auth/register", {
         name,
@@ -54,24 +54,24 @@ function AuthModel({ open, onClose }: propType) {
       });
 
       console.log(data);
-      setstep("otp"); // Navigate to OTP screen after successful signup
+      setStep("otp"); // Navigate to OTP screen after successful signup
     } catch (error: any) {
-      setError(error.response?.data?.error || error.response?.data?.message || "Something went wrong");
+      setErr(error.response?.data?.error || error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyOtp = async () => {
+  const handleVerifyEmail = async () => {
     const otpValue = otp.join("");
     if (otpValue.length < 6) {
-      setError("Please enter all 6 digits");
+      setErr("Please enter all 6 digits");
       return;
     }
 
     try {
       setLoading(true);
-      setError("");
+      setErr("");
 
       const { data } = await axios.post("/api/auth/verify", {
         email,
@@ -80,16 +80,9 @@ function AuthModel({ open, onClose }: propType) {
 
       console.log(data);
       
-      // Auto login after verification
-      const res = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-      console.log(res);
-      onClose(); // Close modal upon successful sign-in
+      setStep("login");
     } catch (error: any) {
-      setError(error.response?.data?.message || error.response?.data?.error || "Failed to verify OTP");
+      setErr(error.response?.data?.message ?? error.response?.data?.error ?? "Failed to verify OTP");
     } finally {
       setLoading(false);
     }
@@ -97,7 +90,7 @@ function AuthModel({ open, onClose }: propType) {
 
   const handleLogin = async () => {
     setLoading(true);
-    setError("");
+    setErr("");
     const res = await signIn("credentials", {
       email,
       password,
@@ -213,7 +206,7 @@ function AuthModel({ open, onClose }: propType) {
                     <p className="mt-6 text-center text-sm text-gray-500">
                       Don&apos;t have an account?
                       <span
-                        onClick={() => setstep("signup")}
+                        onClick={() => setStep("signup")}
                         className="text-black font-medium hover:underline cursor-pointer inline-block ml-1"
                       >
                         Sign up
@@ -266,7 +259,7 @@ function AuthModel({ open, onClose }: propType) {
                         />
                       </div>
 
-                      {error && <p className="text-red-500 text-sm">{error}</p>}
+                      {err && <p className="text-red-500 text-sm">{err}</p>}
 
                       <button
                         className="w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center"
@@ -288,7 +281,7 @@ function AuthModel({ open, onClose }: propType) {
                     <p className="mt-6 text-center text-sm text-gray-500">
                       Already have an account?
                       <span
-                        onClick={() => setstep("login")}
+                        onClick={() => setStep("login")}
                         className="text-black font-medium hover:underline cursor-pointer inline-block ml-1"
                       >
                         Login
@@ -304,7 +297,7 @@ function AuthModel({ open, onClose }: propType) {
                     exit={{ opacity: 0, x: 20 }}
                   >
                     <h2 className="text-xl font-semibold">Verify Email</h2>
-                    {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+                    {err && <p className="text-red-500 text-sm mt-2">{err}</p>}
                     <div className="mt-6 flex justify-between gap-2">
                       {otp.map((digit, i) => (
                         <input
@@ -325,7 +318,7 @@ function AuthModel({ open, onClose }: propType) {
                     </div>
                     <button 
                       className="mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center"
-                      onClick={handleVerifyOtp}
+                      onClick={handleVerifyEmail}
                       disabled={loading}
                     >
                       {!loading ? (
