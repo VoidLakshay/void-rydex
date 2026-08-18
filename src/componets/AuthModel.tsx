@@ -42,11 +42,9 @@ function AuthModel({ open, onClose }: propType) {
     }
   };
 
-  const handelsignup = async () => {
+  const handleSignUp = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setErr("");
-
       const { data } = await axios.post("/api/auth/register", {
         name,
         email,
@@ -54,11 +52,12 @@ function AuthModel({ open, onClose }: propType) {
       });
 
       console.log(data);
-      setStep("otp"); // Navigate to OTP screen after successful signup
-    } catch (error: any) {
-      setErr(error.response?.data?.error || error.response?.data?.message || "Something went wrong");
-    } finally {
+      setErr("");
+      setStep("otp");
       setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      setErr(error.response?.data?.message ?? "Something went wrong");
     }
   };
 
@@ -69,22 +68,21 @@ function AuthModel({ open, onClose }: propType) {
       return;
     }
 
+    setLoading(true);
     try {
-      setLoading(true);
-      setErr("");
-
       const { data } = await axios.post("/api/auth/verify", {
         email,
         otp: otpValue,
       });
 
       console.log(data);
-      
+      setOtp(["", "", "", "", "", ""]);
+      setErr("");
       setStep("login");
-    } catch (error: any) {
-      setErr(error.response?.data?.message ?? error.response?.data?.error ?? "Failed to verify OTP");
-    } finally {
       setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      setErr(error.response?.data?.message ?? "Failed to verify OTP");
     }
   };
 
@@ -264,7 +262,7 @@ function AuthModel({ open, onClose }: propType) {
                       <button
                         className="w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center"
                         disabled={loading}
-                        onClick={handelsignup}
+                        onClick={handleSignUp}
                       >
                         {!loading ? (
                           "Signup"
@@ -294,10 +292,9 @@ function AuthModel({ open, onClose }: propType) {
                     key ="otp"
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
+                    exit={{ opacity: 0, x: -20 }}
                   >
                     <h2 className="text-xl font-semibold">Verify Email</h2>
-                    {err && <p className="text-red-500 text-sm mt-2">{err}</p>}
                     <div className="mt-6 flex justify-between gap-2">
                       {otp.map((digit, i) => (
                         <input
@@ -316,13 +313,14 @@ function AuthModel({ open, onClose }: propType) {
                         />
                       ))}
                     </div>
+                    {err && <p className="text-red-500 text-sm mt-2">{err}</p>}
                     <button 
                       className="mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center"
                       onClick={handleVerifyEmail}
                       disabled={loading}
                     >
                       {!loading ? (
-                        "Verify and Create Account"
+                        "Verify OTP and Create Account"
                       ) : (
                         <CircleDashed size={18} color="white" className="animate-spin" />
                       )}
