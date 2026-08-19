@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+/**
+ * Represents a User in the Rydex system.
+ */
 interface IUser extends mongoose.Document {
   name: string;
   email: string;
