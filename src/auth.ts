@@ -4,7 +4,9 @@ import bcrypt from "bcrypt"
 import connectToDatabase from "./lib/db"
 import User from "./models/user.model"
 import Google from "next-auth/providers/google"
- 
+/**
+ * NextAuth configuration and providers setup
+ */
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
