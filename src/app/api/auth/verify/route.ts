@@ -2,6 +2,9 @@ import connectToDatabase from '@/lib/db'
 import User from '@/models/user.model'
 import { NextRequest, NextResponse } from 'next/server'
 
+/**
+ * API route to verify a user's email using OTP
+ */
 export async function POST(req: NextRequest) {
   try {
     const { email, otp } = await req.json()
