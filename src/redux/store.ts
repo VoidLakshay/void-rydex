@@ -2,6 +2,9 @@ import { configureStore } from '@reduxjs/toolkit'
 // ...
 import userReducer from "./UserSlice"
 
+/**
+ * Global Redux store configuration for the application.
+ */
 export const store = configureStore({
   reducer: {
     user:userReducer
