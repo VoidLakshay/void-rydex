@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
 
     await connectToDatabase()
     
+    // Find user by email to verify OTP
     const user = await User.findOne({ email })
     
     if (!user) {
