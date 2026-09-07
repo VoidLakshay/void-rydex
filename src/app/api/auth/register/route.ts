@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Generate a 6-digit OTP and set expiration to 10 minutes from now
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000)
     const hashedPassword = await bcrypt.hash(password, 10)
