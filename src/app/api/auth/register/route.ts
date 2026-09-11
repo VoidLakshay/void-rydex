@@ -3,6 +3,9 @@ import User from '@/models/user.model'
 import bcrypt from 'bcrypt'
 import { NextRequest, NextResponse } from 'next/server'
 import { sendMail } from '@/lib/SendMail'
+/**
+ * Handles user registration and OTP generation.
+ */
 export async function POST(req: NextRequest) {
   try {
     const { name, email, password } = await req.json()
