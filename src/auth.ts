@@ -48,6 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
     }),
   ],
+  // NextAuth callbacks for custom JWT and Session management
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       if (account?.provider === "google") {
